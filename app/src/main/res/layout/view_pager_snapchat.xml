@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.santiago.stuff.VerticalViewPager
+        android:id="@+id/view_pager_snapchat_vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_snapchat_horizontal"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <View
+        android:id="@+id/view_pager_snapchat_mask"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</merge>
