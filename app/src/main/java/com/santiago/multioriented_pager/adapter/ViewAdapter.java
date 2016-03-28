@@ -1,4 +1,4 @@
-package com.santiago.stuff;
+package com.santiago.multioriented_pager.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.view.View;

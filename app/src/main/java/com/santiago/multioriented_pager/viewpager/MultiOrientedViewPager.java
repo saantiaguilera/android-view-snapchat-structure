@@ -1,6 +1,7 @@
-package com.santiago.stuff;
+package com.santiago.multioriented_pager.viewpager;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -13,7 +14,7 @@ import com.santiago.snapchatscrolls.R;
 /**
  * Created by santiago on 27/03/16.
  */
-public abstract class SnapchatViewPager extends FrameLayout {
+public abstract class MultiOrientedViewPager extends FrameLayout {
 
     public enum SLIDING_MODE { HORIZONTAL, VERTICAL, UNDEFINED }
 
@@ -21,11 +22,11 @@ public abstract class SnapchatViewPager extends FrameLayout {
     private VerticalViewPager verticalViewPager;
     private View mask;
 
-    public SnapchatViewPager(Context context) {
+    public MultiOrientedViewPager(Context context) {
         this(context, null);
     }
 
-    public SnapchatViewPager(Context context, AttributeSet attrs) {
+    public MultiOrientedViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         inflate(context, R.layout.view_pager_snapchat, this);
@@ -64,8 +65,7 @@ public abstract class SnapchatViewPager extends FrameLayout {
         }
     }
 
-    protected abstract boolean handleHorizontalTouchEvent();
-    protected abstract boolean handleVerticalTouchEvent();
+    protected abstract boolean handleTouchEvent(Point point, SLIDING_MODE mode, boolean toLeft);
 
     private OnTouchListener onMaskTouch = new OnTouchListener() {
 
@@ -92,14 +92,14 @@ public abstract class SnapchatViewPager extends FrameLayout {
 
                     switch (mode) {
                         case HORIZONTAL:
-                            if (handleHorizontalTouchEvent()) {
+                            if (handleTouchEvent(new Point((int) startX, (int) startY), SLIDING_MODE.HORIZONTAL, startX < event.getX())) {
                                 horizontalViewPager.bringToFront();
                                 horizontalViewPager.onTouchEvent(event);
                             }
                             break;
 
                         case VERTICAL:
-                            if (handleVerticalTouchEvent()) {
+                            if (handleTouchEvent(new Point((int) startX, (int) startY), SLIDING_MODE.VERTICAL, startY > event.getY())) {
                                 verticalViewPager.bringToFront();
                                 verticalViewPager.onTouchEvent(event);
                             }

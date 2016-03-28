@@ -1,4 +1,4 @@
-package com.santiago.stuff;
+package com.santiago.multioriented_pager.viewpager;
 
 import android.content.Context;
 import android.content.res.Resources;
