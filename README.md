@@ -1,7 +1,10 @@
 # android-view-snapchat-structure
 
-Since my only purpose is to mimic the snapchat thing
-I wont care about doing things really good for scaling.
+Main idea of this APP is to "simulate" the flow of snapchat.
+This means:
+ - Doing a multi oriented view pager
+ - Doing the "I scroll the contact and the chat appears wooo" thing
+ - Checking the camera doesnt lag (Using my android-api-camera. Check possible use of TextureSurface instead of the actual one)
 
-Im only caring about the design patterns of the main structure. Then if I define a contact
-or a hardcoded textview its pretty much the same for this project.
+The other stuff, like for example hardcoded dimens, strings, magical numbers everywhere. I wont care about,
+main point of this is to mimic what was said (Using a good design pattern of course)
