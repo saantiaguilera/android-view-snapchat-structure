@@ -16,7 +16,8 @@ import com.santiago.snapchatscrolls.R;
  */
 public abstract class MultiOrientedViewPager extends FrameLayout {
 
-    public enum SLIDING_MODE { HORIZONTAL, VERTICAL, UNDEFINED }
+    public enum SLIDE { HORIZONTAL, VERTICAL, UNDEFINED }
+    public enum ORIENTATION { TOP, BOTTOM, LEFT, RIGHT }
 
     private ViewPager horizontalViewPager;
     private VerticalViewPager verticalViewPager;
@@ -54,7 +55,7 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
         verticalViewPager.setAdapter(adapter);
     }
 
-    public void setPage(SLIDING_MODE mode, int i) {
+    public void setPage(SLIDE mode, int i) {
         switch (mode) {
             case VERTICAL:
                 verticalViewPager.setCurrentItem(i);
@@ -65,11 +66,11 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
         }
     }
 
-    protected abstract boolean handleTouchEvent(Point point, SLIDING_MODE mode, boolean toLeft);
+    protected abstract boolean handleTouchEvent(Point point, MotionEvent event, SLIDE mode, ORIENTATION orientation);
 
     private OnTouchListener onMaskTouch = new OnTouchListener() {
 
-        SLIDING_MODE mode = SLIDING_MODE.UNDEFINED;
+        SLIDE mode = SLIDE.UNDEFINED;
 
         float startX = 0;
         float startY = 0;
@@ -78,7 +79,7 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    mode = SLIDING_MODE.UNDEFINED;
+                    mode = SLIDE.UNDEFINED;
                     startX = event.getX();
                     startY = event.getY();
 
@@ -87,19 +88,19 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    if (mode == SLIDING_MODE.UNDEFINED)
-                        mode = (Math.abs(event.getX() - startX) > Math.abs(event.getY() - startY) ? SLIDING_MODE.HORIZONTAL : SLIDING_MODE.VERTICAL);
+                    if (mode == SLIDE.UNDEFINED)
+                        mode = (Math.abs(event.getX() - startX) > Math.abs(event.getY() - startY) ? SLIDE.HORIZONTAL : SLIDE.VERTICAL);
 
                     switch (mode) {
                         case HORIZONTAL:
-                            if (handleTouchEvent(new Point((int) startX, (int) startY), SLIDING_MODE.HORIZONTAL, startX < event.getX())) {
+                            if (handleTouchEvent(new Point((int) startX, (int) startY), event, SLIDE.HORIZONTAL, startX < event.getX() ? ORIENTATION.LEFT : ORIENTATION.RIGHT)) {
                                 horizontalViewPager.bringToFront();
                                 horizontalViewPager.onTouchEvent(event);
                             }
                             break;
 
                         case VERTICAL:
-                            if (handleTouchEvent(new Point((int) startX, (int) startY), SLIDING_MODE.VERTICAL, startY > event.getY())) {
+                            if (handleTouchEvent(new Point((int) startX, (int) startY), event, SLIDE.VERTICAL, startY > event.getY() ? ORIENTATION.BOTTOM : ORIENTATION.TOP)) {
                                 verticalViewPager.bringToFront();
                                 verticalViewPager.onTouchEvent(event);
                             }
@@ -109,7 +110,7 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
                 case MotionEvent.ACTION_UP:
                     startX = 0;
                     startY = 0;
-                    mode = SLIDING_MODE.UNDEFINED;
+                    mode = SLIDE.UNDEFINED;
 
                     verticalViewPager.onTouchEvent(event);
                     horizontalViewPager.onTouchEvent(event);
@@ -118,9 +119,7 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
             }
 
             return true;
-
         }
-
     };
 
 }

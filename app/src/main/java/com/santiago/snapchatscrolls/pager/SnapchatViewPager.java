@@ -3,6 +3,7 @@ package com.santiago.snapchatscrolls.pager;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.santiago.multioriented_pager.viewpager.MultiOrientedViewPager;
@@ -31,8 +32,8 @@ public class SnapchatViewPager extends MultiOrientedViewPager {
         initHorizontalViewPager();
         initVerticalViewPager();
 
-        setPage(SLIDING_MODE.VERTICAL, 1);
-        setPage(SLIDING_MODE.HORIZONTAL, 2);
+        setPage(SLIDE.VERTICAL, 1);
+        setPage(SLIDE.HORIZONTAL, 2);
     }
 
     private void initVerticalViewPager() {
@@ -75,7 +76,7 @@ public class SnapchatViewPager extends MultiOrientedViewPager {
     }
 
     @Override
-    protected boolean handleTouchEvent(Point point, SLIDING_MODE mode, boolean toLeft) {
+    protected boolean handleTouchEvent(Point point, MotionEvent event, SLIDE mode, ORIENTATION orientation) {
          switch (mode) {
              case VERTICAL:
                  return getCurrentX() == 2;
@@ -84,7 +85,7 @@ public class SnapchatViewPager extends MultiOrientedViewPager {
                  if(getCurrentY() == 0)
                      return false;
 
-                 return horizontalViews.get(getCurrentX()).canScroll(point, mode, toLeft);
+                 return horizontalViews.get(getCurrentX()).canScroll(point, event, mode, orientation);
          }
         
         return true;

@@ -3,7 +3,7 @@ package com.santiago.snapchatscrolls.view;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.MotionEvent;
 
 import com.santiago.multioriented_pager.viewpager.MultiOrientedViewPager;
 import com.santiago.snapchatscrolls.pager.SnapchatLayout;
@@ -22,7 +22,7 @@ public class EmptyView extends SnapchatLayout {
     }
 
     @Override
-    public boolean canScroll(Point point, MultiOrientedViewPager.SLIDING_MODE mode, boolean toLeft) {
+    public boolean canScroll(Point point, MotionEvent event, MultiOrientedViewPager.SLIDE mode, MultiOrientedViewPager.ORIENTATION orientation) {
         return true;
     }
 

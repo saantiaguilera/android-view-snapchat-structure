@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,8 +44,17 @@ public class ContactListView extends SnapchatLayout {
     //TODO REFACTOR
     //We should just check against the "Contact View" or maybe use the recycler to know if that rect is of him
     @Override
-    public boolean canScroll(Point point, MultiOrientedViewPager.SLIDING_MODE mode, boolean toLeft) {
-        return isInsideView(point) || !toLeft;
+    public boolean canScroll(Point point, MotionEvent event, MultiOrientedViewPager.SLIDE mode, MultiOrientedViewPager.ORIENTATION orientation) {
+        boolean canScroll = isInsideView(point) || orientation != MultiOrientedViewPager.ORIENTATION.LEFT;
+
+        if (canScroll)
+            moveView();
+
+        return canScroll;
+    }
+
+    private void moveView() {
+
     }
 
     private boolean isInsideView(Point point) {
