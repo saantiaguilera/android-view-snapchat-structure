@@ -86,6 +86,8 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
         float startX = 0;
         float startY = 0;
 
+        private static final float MOVE_THRESHOLD = 10;
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
@@ -99,8 +101,12 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    if (mode == SLIDE.UNDEFINED)
+                    if (mode == SLIDE.UNDEFINED) {
+                        if(Math.abs(event.getX() - startX) < MOVE_THRESHOLD && Math.abs(event.getY() - startY) < MOVE_THRESHOLD)
+                            return true;
+
                         mode = (Math.abs(event.getX() - startX) > Math.abs(event.getY() - startY) ? SLIDE.HORIZONTAL : SLIDE.VERTICAL);
+                    }
 
                     switch (mode) {
                         case HORIZONTAL:
