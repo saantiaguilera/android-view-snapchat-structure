@@ -3,7 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.santiago.snapchatscrolls.pager.SnapchatViewPager
+    <com.santiago.snapchatscrolls.view.pager.SnapchatViewPager
+        android:id="@+id/activity_home_snapchat_view_pager"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

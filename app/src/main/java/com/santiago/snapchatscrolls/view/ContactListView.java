@@ -1,18 +1,11 @@
 package com.santiago.snapchatscrolls.view;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.santiago.multioriented_pager.viewpager.MultiOrientedViewPager;
 import com.santiago.snapchatscrolls.R;
-import com.santiago.snapchatscrolls.pager.SnapchatLayout;
+import com.santiago.snapchatscrolls.view.pager.SnapchatLayout;
 
 /**
  * Since my only purpose is to mimic the snapchat thing
@@ -37,62 +30,14 @@ public class ContactListView extends SnapchatLayout {
         setOrientation(VERTICAL);
 
         recyclerView = (RecyclerView) findViewById(R.id.view_contact_list_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), VERTICAL, false));
-        recyclerView.setAdapter(new ContactsAdapter());
     }
 
-    //TODO REFACTOR
-    //We should just check against the "Contact View" or maybe use the recycler to know if that rect is of him
-    @Override
-    public boolean canScroll(Point point, MotionEvent event, MultiOrientedViewPager.SLIDE mode, MultiOrientedViewPager.ORIENTATION orientation) {
-        boolean canScroll = isInsideView(point) || orientation != MultiOrientedViewPager.ORIENTATION.LEFT;
-
-        if (canScroll)
-            moveView();
-
-        return canScroll;
+    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+        recyclerView.setLayoutManager(layoutManager);
     }
 
-    private void moveView() {
-
-    }
-
-    private boolean isInsideView(Point point) {
-        int[] l = new int[2];
-        recyclerView.getChildAt(recyclerView.getChildCount() - 1).getLocationOnScreen(l);
-        int y = l[1];
-
-        if (point.y < y)
-            return true;
-
-        return false;
-    }
-
-    public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
-
-        public ContactsAdapter() {}
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public ViewHolder(View itemView) {
-                super(itemView);
-            }
-        }
-
-        @Override
-        public ContactsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            ViewHolder viewHolder = new ViewHolder(new TextView(getContext()));
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(ContactsAdapter.ViewHolder viewHolder, int position) {
-            ((TextView) viewHolder.itemView).setText("CONTACT");
-        }
-
-        @Override
-        public int getItemCount() {
-            return 3;
-        }
+    public void setAdapter(RecyclerView.Adapter adapter) {
+        recyclerView.setAdapter(adapter);
     }
 
 }

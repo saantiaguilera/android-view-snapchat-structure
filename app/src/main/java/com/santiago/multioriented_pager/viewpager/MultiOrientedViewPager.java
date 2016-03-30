@@ -9,7 +9,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.santiago.multioriented_pager.adapter.ViewAdapter;
 import com.santiago.snapchatscrolls.R;
+
+import java.util.List;
 
 /**
  * Created by santiago on 27/03/16.
@@ -66,6 +69,14 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
         }
     }
 
+    protected ViewPager getHorizontalViewPager() {
+        return horizontalViewPager;
+    }
+
+    protected VerticalViewPager getVerticalViewPager() {
+        return verticalViewPager;
+    }
+
     protected abstract boolean handleTouchEvent(Point point, MotionEvent event, SLIDE mode, ORIENTATION orientation);
 
     private OnTouchListener onMaskTouch = new OnTouchListener() {
@@ -108,12 +119,14 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
                     break;
 
                 case MotionEvent.ACTION_UP:
+                    verticalViewPager.onTouchEvent(event);
+                    horizontalViewPager.onTouchEvent(event);
+                    handleTouchEvent(new Point((int) startX, (int) startY), event, mode, null);
+
                     startX = 0;
                     startY = 0;
                     mode = SLIDE.UNDEFINED;
 
-                    verticalViewPager.onTouchEvent(event);
-                    horizontalViewPager.onTouchEvent(event);
 
                     mask.bringToFront();
             }

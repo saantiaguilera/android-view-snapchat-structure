@@ -10,4 +10,6 @@
     <color name="color5">#ff8800</color>
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="blue">#2c73ff</color>
 </resources>
