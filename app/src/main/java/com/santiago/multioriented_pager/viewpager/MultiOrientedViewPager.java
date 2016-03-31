@@ -83,56 +83,47 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
 
         SLIDE mode = SLIDE.UNDEFINED;
 
-        float startX = 0;
-        float startY = 0;
-
-        private static final float MOVE_THRESHOLD = 10;
+        private Point point = null;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     mode = SLIDE.UNDEFINED;
-                    startX = event.getX();
-                    startY = event.getY();
+                    point = new Point((int) event.getX(), (int) event.getY());
 
-                    verticalViewPager.onTouchEvent(event);
-                    horizontalViewPager.onTouchEvent(event);
+                    verticalViewPager.dispatchTouchEvent(event);
+                    horizontalViewPager.dispatchTouchEvent(event);
                     break;
 
                 case MotionEvent.ACTION_MOVE:
                     if (mode == SLIDE.UNDEFINED) {
-                        if(Math.abs(event.getX() - startX) < MOVE_THRESHOLD && Math.abs(event.getY() - startY) < MOVE_THRESHOLD)
-                            return true;
-
-                        mode = (Math.abs(event.getX() - startX) > Math.abs(event.getY() - startY) ? SLIDE.HORIZONTAL : SLIDE.VERTICAL);
+                        mode = (Math.abs(event.getX() - point.x) > Math.abs(event.getY() - point.y) ? SLIDE.HORIZONTAL : SLIDE.VERTICAL);
                     }
 
                     switch (mode) {
                         case HORIZONTAL:
-                            if (handleTouchEvent(new Point((int) startX, (int) startY), event, SLIDE.HORIZONTAL, startX < event.getX() ? ORIENTATION.LEFT : ORIENTATION.RIGHT)) {
+                            if (handleTouchEvent(point, event, SLIDE.HORIZONTAL, point.x < event.getX() ? ORIENTATION.LEFT : ORIENTATION.RIGHT)) {
                                 horizontalViewPager.bringToFront();
-                                horizontalViewPager.onTouchEvent(event);
+                                horizontalViewPager.dispatchTouchEvent(event);
                             }
                             break;
 
                         case VERTICAL:
-                            if (handleTouchEvent(new Point((int) startX, (int) startY), event, SLIDE.VERTICAL, startY > event.getY() ? ORIENTATION.BOTTOM : ORIENTATION.TOP)) {
+                            if (handleTouchEvent(point, event, SLIDE.VERTICAL, point.y > event.getY() ? ORIENTATION.BOTTOM : ORIENTATION.TOP)) {
                                 verticalViewPager.bringToFront();
-                                verticalViewPager.onTouchEvent(event);
+                                verticalViewPager.dispatchTouchEvent(event);
                             }
                     }
                     break;
 
                 case MotionEvent.ACTION_UP:
-                    verticalViewPager.onTouchEvent(event);
-                    horizontalViewPager.onTouchEvent(event);
-                    handleTouchEvent(new Point((int) startX, (int) startY), event, mode, null);
+                    verticalViewPager.dispatchTouchEvent(event);
+                    horizontalViewPager.dispatchTouchEvent(event);
+                    handleTouchEvent(point, event, mode, null);
 
-                    startX = 0;
-                    startY = 0;
+                    point = null;
                     mode = SLIDE.UNDEFINED;
-
 
                     mask.bringToFront();
             }

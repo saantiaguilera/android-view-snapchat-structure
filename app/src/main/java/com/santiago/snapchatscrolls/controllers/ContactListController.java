@@ -42,9 +42,6 @@ public class ContactListController extends BaseController<ContactListView> imple
 
     @Override
     public boolean canScroll(Point point, MotionEvent event, MultiOrientedViewPager.SLIDE mode, MultiOrientedViewPager.ORIENTATION orientation) {
-        if (orientation != null && orientation != MultiOrientedViewPager.ORIENTATION.LEFT)
-            return true;
-
         for (int i = layoutManager.findFirstVisibleItemPosition() ; i <= layoutManager.findLastVisibleItemPosition() ; i++) {
             ContactView view = (ContactView) layoutManager.getChildAt(i);
 
@@ -53,7 +50,7 @@ public class ContactListController extends BaseController<ContactListView> imple
 
         }
 
-        return false;
+        return orientation != MultiOrientedViewPager.ORIENTATION.LEFT;
     }
 
 }

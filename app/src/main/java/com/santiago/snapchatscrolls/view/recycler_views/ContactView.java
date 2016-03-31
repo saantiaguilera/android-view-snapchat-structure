@@ -7,9 +7,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.santiago.snapchatscrolls.R;
 
@@ -34,10 +36,49 @@ public class ContactView extends FrameLayout {
         nameView = (TextView) findViewById(R.id.view_contact_name);
         informationContainer = (LinearLayout) findViewById(R.id.view_contact_container);
         bgContainer = (FrameLayout) findViewById(R.id.view_contact_bg_container);
+
+        informationContainer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animateBounce();
+            }
+        });
+
+        informationContainer.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getContext(), "Close, but I wont do this :)", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
     }
 
     public void setName(String text) {
         nameView.setText(text);
+    }
+
+    private void animateBounce() {
+        ValueAnimator animator = ValueAnimator.ofInt(0, bgContainer.getWidth(), 10, 20, 5, 10, 2, 5, 0, 2, 0);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                informationContainer.setPadding((Integer) animation.getAnimatedValue(), 0, 0, 0);
+            }
+        });
+        animator.setDuration(900);
+        animator.start();
+    }
+
+    private void animateBack() {
+        ValueAnimator animator = ValueAnimator.ofInt(informationContainer.getPaddingLeft(), 0);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator){
+                informationContainer.setPadding((Integer) valueAnimator.getAnimatedValue(), 0, 0, 0);
+            }
+        });
+        animator.setDuration(400);
+        animator.start();
     }
 
     public boolean handleMove(Point start, MotionEvent event) {
@@ -47,24 +88,18 @@ public class ContactView extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 distance = (int) (event.getX() - start.x);
 
-                if (distance > 0 && distance <= bgContainer.getWidth())
-                    informationContainer.setPadding(distance, 0, 0, 0);
+                if (distance > 0) {
+                    if (distance <= bgContainer.getWidth())
+                        informationContainer.setPadding(distance, 0, 0, 0);
+                }
 
                 break;
 
             case MotionEvent.ACTION_UP:
-                ValueAnimator animator = ValueAnimator.ofInt(informationContainer.getPaddingLeft(), 0);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator){
-                        informationContainer.setPadding((Integer) valueAnimator.getAnimatedValue(), 0, 0, 0);
-                    }
-                });
-                animator.setDuration(400);
-                animator.start();
+                animateBack();
         }
 
-        return distance >= bgContainer.getWidth();
+        return distance < 0 || distance >= bgContainer.getWidth();
     }
 
 }
