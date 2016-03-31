@@ -11,7 +11,7 @@ import com.santiago.multioriented_pager.viewpager.MultiOrientedViewPager;
 /**
  * Created by santiago on 28/03/16.
  */
-public abstract class SnapchatLayout extends LinearLayout {
+public class SnapchatLayout extends LinearLayout {
 
     private SnapchatLayoutListener listener;
 

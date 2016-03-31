@@ -22,6 +22,7 @@ import java.util.List;
 public class SnapchatViewPagerController extends BaseController<SnapchatViewPager> {
 
     private ContactListController contactsController;
+    private CameraController cameraController;
 
     public SnapchatViewPagerController(Context context) {
         super(context);
@@ -79,6 +80,7 @@ public class SnapchatViewPagerController extends BaseController<SnapchatViewPage
     public void setEventHandlerListener(EventManager eventManager) {
         super.setEventHandlerListener(eventManager);
         contactsController.setEventHandlerListener(eventManager);
+        cameraController.setEventHandlerListener(eventManager);
     }
 
     private void initHorizontalControllers() {
@@ -90,8 +92,7 @@ public class SnapchatViewPagerController extends BaseController<SnapchatViewPage
         contactsController = new ContactListController(getContext(), new ContactListView(getContext()));
         contactsController.getElement().setBackgroundColor(getContext().getResources().getColor(R.color.white));
 
-        SnapchatLayout view2 = new EmptyView(getContext());
-        view2.setBackgroundColor(getContext().getResources().getColor(R.color.color2));
+        cameraController = new CameraController(getContext());
 
         SnapchatLayout view3 = new EmptyView(getContext());
         view3.setBackgroundColor(getContext().getResources().getColor(R.color.color3));
@@ -101,7 +102,7 @@ public class SnapchatViewPagerController extends BaseController<SnapchatViewPage
 
         horizontalViews.add(view0);
         horizontalViews.add(contactsController.getElement());
-        horizontalViews.add(view2);
+        horizontalViews.add(cameraController.getElement());
         horizontalViews.add(view3);
         horizontalViews.add(view4);
         getElement().setHorizontalViews(horizontalViews);
