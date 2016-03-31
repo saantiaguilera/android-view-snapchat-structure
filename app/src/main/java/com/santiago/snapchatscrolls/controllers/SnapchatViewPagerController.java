@@ -1,10 +1,13 @@
 package com.santiago.snapchatscrolls.controllers;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 
 import com.santiago.controllers.BaseController;
+import com.santiago.event.EventManager;
 import com.santiago.multioriented_pager.viewpager.MultiOrientedViewPager;
 import com.santiago.snapchatscrolls.R;
+import com.santiago.snapchatscrolls.event.SwipePageChangeEvent;
 import com.santiago.snapchatscrolls.view.ContactListView;
 import com.santiago.snapchatscrolls.view.EmptyView;
 import com.santiago.snapchatscrolls.view.pager.SnapchatLayout;
@@ -36,6 +39,46 @@ public class SnapchatViewPagerController extends BaseController<SnapchatViewPage
 
         snapchatViewPager.setPage(MultiOrientedViewPager.SLIDE.VERTICAL, 1);
         snapchatViewPager.setPage(MultiOrientedViewPager.SLIDE.HORIZONTAL, 2);
+
+        snapchatViewPager.setOnHorizontalPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                broadcastEvent(new SwipePageChangeEvent(position, MultiOrientedViewPager.SLIDE.HORIZONTAL));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        snapchatViewPager.setOnVerticalPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                broadcastEvent(new SwipePageChangeEvent(position, MultiOrientedViewPager.SLIDE.VERTICAL));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    @Override
+    public void setEventHandlerListener(EventManager eventManager) {
+        super.setEventHandlerListener(eventManager);
+        contactsController.setEventHandlerListener(eventManager);
     }
 
     private void initHorizontalControllers() {

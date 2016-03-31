@@ -47,6 +47,9 @@ public class ContactView extends FrameLayout {
         informationContainer.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                if (informationContainer.getPaddingLeft() != 0)
+                    return true;
+
                 Toast.makeText(getContext(), "Close, but I wont do this :)", Toast.LENGTH_LONG).show();
                 return true;
             }
@@ -58,6 +61,9 @@ public class ContactView extends FrameLayout {
     }
 
     private void animateBounce() {
+        if (informationContainer.getPaddingLeft() != 0)
+            return;
+
         ValueAnimator animator = ValueAnimator.ofInt(0, bgContainer.getWidth(), 10, 20, 5, 10, 2, 5, 0, 2, 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -69,7 +75,10 @@ public class ContactView extends FrameLayout {
         animator.start();
     }
 
-    private void animateBack() {
+    public void resetBack() {
+        if (informationContainer.getPaddingLeft() == 0)
+            return;
+
         ValueAnimator animator = ValueAnimator.ofInt(informationContainer.getPaddingLeft(), 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -95,11 +104,13 @@ public class ContactView extends FrameLayout {
 
                 break;
 
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_BUTTON_RELEASE:
             case MotionEvent.ACTION_UP:
-                animateBack();
+                resetBack();
         }
 
-        return distance < 0 || distance >= bgContainer.getWidth();
+        return distance <= 0 || distance >= bgContainer.getWidth();
     }
 
 }

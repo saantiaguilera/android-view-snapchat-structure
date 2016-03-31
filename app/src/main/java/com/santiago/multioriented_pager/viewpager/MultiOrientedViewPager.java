@@ -42,6 +42,14 @@ public abstract class MultiOrientedViewPager extends FrameLayout {
         mask.setOnTouchListener(onMaskTouch);
     }
 
+    public void setOnHorizontalPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
+        horizontalViewPager.setOnPageChangeListener(onPageChangeListener);
+    }
+
+    public void setOnVerticalPageChangeListener(ViewPager.OnPageChangeListener onVerticalPageChangeListener) {
+        verticalViewPager.setOnPageChangeListener(onVerticalPageChangeListener);
+    }
+
     public int getCurrentX() {
         return horizontalViewPager.getCurrentItem();
     }
